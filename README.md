@@ -3,9 +3,7 @@
 - Clone data yang ada pada repository ini ke dalam lokal PC
 - Siapkan DBMS pada local PC (Bebas)
 - Buat tabel : data_cabang dan data_nasabah
-- Export data berikut kedalam tabel yang telah di buat:
-  * data_cabang.csv
-  * data_nasabah.csv
+- Export data berikut kedalam tabel yang telah di buat: data_cabang.csv dan data_nasabah.csv
 
 ### Test 1 ###
 
@@ -39,3 +37,5 @@
     - usia  >= 60 tahun masuk ke dalam kelompok 11
   ```
 * Hasil data di Screen Shoot dan simpan kedalam repository peserta  dengan akses public di sertai dengan informasi engine DBMS yang digunakan serta script query yang dibuat dalam format .txt
+
+# Selamat mengerjakan, semoga sukses #
