@@ -38,4 +38,4 @@
   ```
 * Hasil data di Screen Shoot dan simpan kedalam repository peserta  dengan akses public di sertai dengan informasi engine DBMS yang digunakan serta script query yang dibuat dalam format .txt
 
-# Selamat mengerjakan, semoga sukses #
+# Selamat mengerjakan, semoga sukses... #
