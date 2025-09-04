@@ -1,62 +1,57 @@
 -- Test 1 --
-WITH cabkor AS(
-SELECT nama AS cabkor
-FROM `rekrutmenitdata.data_cabang`
-WHERE
-  nama AS cabkor = 'Kantor Cabang Koordinator%'
-),
-cabang AS(
-SELECT nama AS cabang
-FROM `rekrutmenitdata.data_cabang`
-WHERE
-  cabang = 'Kantor Cabang%'
-),
-unit_kerja AS(
-SELECT nama AS unit_kerja
-FROM `rekrutmenitdata.data_cabang`
-WHERE
-  cabang = '%Cabang%'
-)
-SELECT
-  cabkor, 
-  cabang,
-  unit_kerja
-FROM cabkor, cabang, unit_kerja
+SELECT 
+    CASE 
+        WHEN a.nama LIKE '%Cabang Koordinator%' THEN a.nama
+        ELSE a.nama
+    END AS cabkor,
+    
+    CASE 
+        WHEN a.nama LIKE '%Cabang%' AND a.nama NOT LIKE '%Cabang Koordinator%' THEN a.nama
+        ELSE a.nama
+    END AS cabang,
+    
+    CASE 
+        WHEN a.nama LIKE '%Cabang Pembantu%' THEN a.nama
+        ELSE a.nama
+    END AS unit_kerja
+FROM `rekrutmenitdata.data_cabang` a;
 
 -- Test 2 --
-WITH CekTanggal(
-  EXTRACT(DATE FROM Tanggalahir) AS DATE
-  WHERE EXTRACT(DATE FROM Tanggalahir) = 
-)
-SELECT
-  IdNasabah,
-  KodeCabang,
-  NamaNasabah,
-  TanggalLahir,
-FROM `rekrutmenitdata.data_nasabah`
-WHERE
+SELECT 
+    IdNasabah, 
+    KodeCabang, 
+    NamaNasabah, 
+    TanggalLahir, 
+    CASE 
+        WHEN SAFE.PARSE_DATE('%Y%m%d', CAST(TanggalLahir AS STRING)) IS NULL THEN 'False'
+        WHEN EXTRACT(DAY FROM SAFE.PARSE_DATE('%Y%m%d', CAST(TanggalLahir AS STRING))) > 31 THEN 'False'
+        WHEN EXTRACT(MONTH FROM SAFE.PARSE_DATE('%Y%m%d', CAST(TanggalLahir AS STRING))) = 2
+             AND EXTRACT(DAY FROM SAFE.PARSE_DATE('%Y%m%d', CAST(TanggalLahir AS STRING))) > 29 THEN 'False'
+        WHEN EXTRACT(MONTH FROM SAFE.PARSE_DATE('%Y%m%d', CAST(TanggalLahir AS STRING))) IN (4, 6, 9, 11)
+             AND EXTRACT(DAY FROM SAFE.PARSE_DATE('%Y%m%d', CAST(TanggalLahir AS STRING))) > 30 THEN 'False'
+        ELSE 'True'
+    END AS CekTanggal
+FROM `rekrutmenitdata.data_nasabah`;
 
 -- Test 3 --
-WITH KelompokUsia AS(
-  SELECT TanggalLahir
-  FROM `rekrutmenitdata.data_nasabah`
-  WHERE usia  <= 14 tahun masuk ke dalam kelompok 01
-  usia  15 tahun sampai dengan 19 tahun  masuk ke dalam kelompok 02
-  usia  20 tahun sampai dengan 24 tahun  masuk ke dalam kelompok 03
-  usia  25 tahun sampai dengan 29 tahun  masuk ke dalam kelompok 04
-  usia  30 tahun sampai dengan 34 tahun  masuk ke dalam kelompok 05
-  usia  35 tahun sampai dengan 39 tahun  masuk ke dalam kelompok 06
-  usia  40 tahun sampai dengan 44 tahun  masuk ke dalam kelompok 07
-  usia  45 tahun sampai dengan 49 tahun  masuk ke dalam kelompok 08
-  usia  50 tahun sampai dengan 54 tahun  masuk ke dalam kelompok 09
-  usia  55 tahun sampai dengan 59 tahun  masuk ke dalam kelompok 10
-  usia  >= 60 tahun masuk ke dalam kelompok 11
-)
-SELECT
-  Pekerjaan,
-  KelompokUsia,
-  Total
+SELECT 
+    Pekerjaan,
+    CASE
+        WHEN SAFE.PARSE_DATE('%Y%m%d', CAST(TanggalLahir AS STRING)) IS NULL THEN 1
+        WHEN EXTRACT(YEAR FROM CURRENT_DATE()) - EXTRACT(YEAR FROM SAFE.PARSE_DATE('%Y%m%d', CAST(TanggalLahir AS STRING))) <= 14 THEN 1  -- (age <= 14)
+        WHEN EXTRACT(YEAR FROM CURRENT_DATE()) - EXTRACT(YEAR FROM SAFE.PARSE_DATE('%Y%m%d', CAST(TanggalLahir AS STRING))) BETWEEN 15 AND 19 THEN 2  -- (15-19)
+        WHEN EXTRACT(YEAR FROM CURRENT_DATE()) - EXTRACT(YEAR FROM SAFE.PARSE_DATE('%Y%m%d', CAST(TanggalLahir AS STRING))) BETWEEN 20 AND 24 THEN 3  -- (20-24)
+        WHEN EXTRACT(YEAR FROM CURRENT_DATE()) - EXTRACT(YEAR FROM SAFE.PARSE_DATE('%Y%m%d', CAST(TanggalLahir AS STRING))) BETWEEN 25 AND 29 THEN 4  -- (25-29)
+        WHEN EXTRACT(YEAR FROM CURRENT_DATE()) - EXTRACT(YEAR FROM SAFE.PARSE_DATE('%Y%m%d', CAST(TanggalLahir AS STRING))) BETWEEN 30 AND 34 THEN 5  -- (30-34)
+        WHEN EXTRACT(YEAR FROM CURRENT_DATE()) - EXTRACT(YEAR FROM SAFE.PARSE_DATE('%Y%m%d', CAST(TanggalLahir AS STRING))) BETWEEN 35 AND 39 THEN 6  -- (35-39)
+        WHEN EXTRACT(YEAR FROM CURRENT_DATE()) - EXTRACT(YEAR FROM SAFE.PARSE_DATE('%Y%m%d', CAST(TanggalLahir AS STRING))) BETWEEN 40 AND 44 THEN 7  -- (40-44)
+        WHEN EXTRACT(YEAR FROM CURRENT_DATE()) - EXTRACT(YEAR FROM SAFE.PARSE_DATE('%Y%m%d', CAST(TanggalLahir AS STRING))) BETWEEN 45 AND 49 THEN 8  -- (45-49)
+        WHEN EXTRACT(YEAR FROM CURRENT_DATE()) - EXTRACT(YEAR FROM SAFE.PARSE_DATE('%Y%m%d', CAST(TanggalLahir AS STRING))) BETWEEN 50 AND 54 THEN 9  -- (50-54)
+        WHEN EXTRACT(YEAR FROM CURRENT_DATE()) - EXTRACT(YEAR FROM SAFE.PARSE_DATE('%Y%m%d', CAST(TanggalLahir AS STRING))) BETWEEN 55 AND 59 THEN 10  -- (55-59)
+        WHEN EXTRACT(YEAR FROM CURRENT_DATE()) - EXTRACT(YEAR FROM SAFE.PARSE_DATE('%Y%m%d', CAST(TanggalLahir AS STRING))) >= 60 THEN 11  -- (60+)
+    END AS KelompokUsia,
+    
+    COUNT(*) AS Total
 FROM `rekrutmenitdata.data_nasabah`
-WHERE
-
-
+GROUP BY Pekerjaan, KelompokUsia
+ORDER BY Pekerjaan, KelompokUsia;
