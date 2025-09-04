@@ -1,0 +1,62 @@
+-- Test 1 --
+WITH cabkor AS(
+SELECT nama AS cabkor
+FROM `rekrutmenitdata.data_cabang`
+WHERE
+  nama AS cabkor = 'Kantor Cabang Koordinator%'
+),
+cabang AS(
+SELECT nama AS cabang
+FROM `rekrutmenitdata.data_cabang`
+WHERE
+  cabang = 'Kantor Cabang%'
+),
+unit_kerja AS(
+SELECT nama AS unit_kerja
+FROM `rekrutmenitdata.data_cabang`
+WHERE
+  cabang = '%Cabang%'
+)
+SELECT
+  cabkor, 
+  cabang,
+  unit_kerja
+FROM cabkor, cabang, unit_kerja
+
+-- Test 2 --
+WITH CekTanggal(
+  EXTRACT(DATE FROM Tanggalahir) AS DATE
+  WHERE EXTRACT(DATE FROM Tanggalahir) = 
+)
+SELECT
+  IdNasabah,
+  KodeCabang,
+  NamaNasabah,
+  TanggalLahir,
+FROM `rekrutmenitdata.data_nasabah`
+WHERE
+
+-- Test 3 --
+WITH KelompokUsia AS(
+  SELECT TanggalLahir
+  FROM `rekrutmenitdata.data_nasabah`
+  WHERE usia  <= 14 tahun masuk ke dalam kelompok 01
+  usia  15 tahun sampai dengan 19 tahun  masuk ke dalam kelompok 02
+  usia  20 tahun sampai dengan 24 tahun  masuk ke dalam kelompok 03
+  usia  25 tahun sampai dengan 29 tahun  masuk ke dalam kelompok 04
+  usia  30 tahun sampai dengan 34 tahun  masuk ke dalam kelompok 05
+  usia  35 tahun sampai dengan 39 tahun  masuk ke dalam kelompok 06
+  usia  40 tahun sampai dengan 44 tahun  masuk ke dalam kelompok 07
+  usia  45 tahun sampai dengan 49 tahun  masuk ke dalam kelompok 08
+  usia  50 tahun sampai dengan 54 tahun  masuk ke dalam kelompok 09
+  usia  55 tahun sampai dengan 59 tahun  masuk ke dalam kelompok 10
+  usia  >= 60 tahun masuk ke dalam kelompok 11
+)
+SELECT
+  Pekerjaan,
+  KelompokUsia,
+  Total
+FROM `rekrutmenitdata.data_nasabah`
+WHERE
+
+
